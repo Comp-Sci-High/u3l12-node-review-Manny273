@@ -87,15 +87,33 @@ let endangeredSpeciesData = {
 
 // INSTRUCTIONS: Set up the code that does the following
 // - console logs the method and URL for every request
+app.use((req,res,next) => {
+    console.log(req.method + "/" + req.url)
+    next()
+})
 // - sends back "Explore data on endangered species, their habitats, threats, and conservation efforts." as an h2 when the client goes to /
+app.get("/", (req,res)=>{
+    res.send("<h2>Explore data on endangered species, their habitats, threats, and conservation efforts.</h2>")
+}) 
 // - sends back the species array when the client goes to /species
+app.get("/species", (req,res)=>{
+    res.send(endangeredSpeciesData.species)
+})
 // - sends back the conservation_efforts object when the client goes to /conservation
+app.get("/conservation", (req,res)=>{
+    res.send(endangeredSpeciesData.conservation_efforts)
+})
 // - sends back the the "Amazon Rainforest" region object when the client goes to /region/1
+app.get("/region/:index", (req,res)=>{
+    res.send(endangeredSpeciesData.regions_at_risk[req.params.index - 1])
+})
 // - EXTRA CREDIT: modify your region route handler to send any region using the dynamic parameter region/{index}
 // - sends back a 404 page for all other paths
 
 
-
+app.use((req,res,next) => {
+    res.status(404).send("404 not found")
+})
 
 
 app.listen(3000, () => {
